@@ -91,6 +91,7 @@ public class TextEditor extends JFrame{
 		toolBar.add(saveAction);
 		toolBar.add(saveAsAction);
 		toolBar.add(quitAction);
+		toolBar.add(reportBugAction);
 		return toolBar;
 	}
 	
@@ -147,6 +148,9 @@ public class TextEditor extends JFrame{
 		fileMenu.add(saveAction);
 		fileMenu.add(saveAsAction);
 		fileMenu.add(quitAction);
+		JMenu helpMenu = new JMenu("Help");
+		menuBar.add(helpMenu);
+		helpMenu.add(reportBugAction);
 		return menuBar;
 	}
 	
@@ -305,7 +309,7 @@ public class TextEditor extends JFrame{
 		public void actionPerformed(ActionEvent e) {
 			Desktop desktop = Desktop.getDesktop();
 			try {
-				desktop.browse(new URI("https://<URL Github>"));
+				desktop.browse(new URI("https://github.com/RIC217/TextEditor/issues"));
 			} catch (IOException | URISyntaxException e1) {
 				e1.printStackTrace();
 			}
