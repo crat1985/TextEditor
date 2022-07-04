@@ -32,6 +32,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
@@ -63,6 +64,7 @@ public class TextEditor extends JFrame{
 		scTextArea = new JScrollPane(textArea=new JTextArea());
 		textArea.setTabSize(2);
 		contentPane.add(scTextArea);
+		textArea.setComponentPopupMenu(createPopupMenu());
 		
 		JToolBar toolBar = createJToolBar();
 		contentPane.add(toolBar,BorderLayout.NORTH);
@@ -80,6 +82,23 @@ public class TextEditor extends JFrame{
 		});
 	}
 	
+	private JPopupMenu createPopupMenu() {
+		JPopupMenu popupMenu = new JPopupMenu();
+		JMenu newMenu = new JMenu("New...");
+		popupMenu.add(newMenu);
+		newMenu.add(newEmptyFileAction);
+		newMenu.add(newJavaFileAction);
+		popupMenu.add(cutAction);
+		popupMenu.add(copyAction);
+		popupMenu.add(pasteAction);
+		popupMenu.add(openFileAction);
+		popupMenu.add(saveAction);
+		popupMenu.add(saveAsAction);
+		popupMenu.add(quitAction);
+		popupMenu.add(reportBugAction);
+		return popupMenu;
+	}
+
 	private void closeWindow() {
 		if(!confirmClearTextArea()) {
 			return;
