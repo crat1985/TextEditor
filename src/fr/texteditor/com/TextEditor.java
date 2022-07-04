@@ -1,25 +1,29 @@
 package fr.texteditor.com;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
+import java.net.URL;
 
+import javax.media.Manager;
+import javax.media.NoPlayerException;
+import javax.media.Player;
+import javax.media.protocol.URLDataSource;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -36,7 +40,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
-import org.apache.commons.lang3.StringUtils;
+import com.ibm.media.bean.multiplayer.MultiPlayerBean;
 
 public class TextEditor extends JFrame{
 
@@ -87,6 +91,9 @@ public class TextEditor extends JFrame{
 		JToolBar toolBar = new JToolBar();
 		toolBar.add(newEmptyFileAction);
 		toolBar.add(newJavaFileAction);
+		toolBar.add(cutAction);
+		toolBar.add(copyAction);
+		toolBar.add(pasteAction);
 		toolBar.add(openFileAction);
 		toolBar.add(saveAction);
 		toolBar.add(saveAsAction);
@@ -144,6 +151,9 @@ public class TextEditor extends JFrame{
 		fileMenu.add(newMenu);
 		newMenu.add(newEmptyFileAction);
 		newMenu.add(newJavaFileAction);
+		fileMenu.add(cutAction);
+		fileMenu.add(copyAction);
+		fileMenu.add(pasteAction);
 		fileMenu.add(openFileAction);
 		fileMenu.add(saveAction);
 		fileMenu.add(saveAsAction);
@@ -201,7 +211,47 @@ public class TextEditor extends JFrame{
 		}
 	};
 	
+	private AbstractAction cutAction = new AbstractAction() {
+		{
+			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_X,KeyEvent.CTRL_DOWN_MASK));
+			putValue(MNEMONIC_KEY, KeyEvent.VK_X);
+			putValue(NAME, "Cut");
+			putValue(SHORT_DESCRIPTION, "Cut the selected text");
+			putValue(SMALL_ICON, new ImageIcon(getClass().getResource("icons/cut.png")));
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			textArea.cut();
+		}
+	};
 	
+	private AbstractAction copyAction = new AbstractAction() {
+		{
+			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_C,KeyEvent.CTRL_DOWN_MASK));
+			putValue(MNEMONIC_KEY, KeyEvent.VK_C);
+			putValue(NAME, "Copy");
+			putValue(SHORT_DESCRIPTION, "Copy the selected text");
+			putValue(SMALL_ICON, new ImageIcon(getClass().getResource("icons/copy.png")));
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			textArea.copy();
+		}
+	};
+	
+	private AbstractAction pasteAction = new AbstractAction() {
+		{
+			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_V,KeyEvent.CTRL_DOWN_MASK));
+			putValue(MNEMONIC_KEY, KeyEvent.VK_V);
+			putValue(NAME, "Paste");
+			putValue(SHORT_DESCRIPTION, "Paste");
+			putValue(SMALL_ICON, new ImageIcon(getClass().getResource("icons/paste.png")));
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			textArea.paste();
+		}
+	};
 	
 	private AbstractAction openFileAction = new AbstractAction() {
 		{
